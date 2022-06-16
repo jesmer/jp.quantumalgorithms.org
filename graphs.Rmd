@@ -1,0 +1,4 @@
+# Quantum algorithms for graph problems {#chap-graphs}
+
+<div style="text-align: right"> Translation:  </div>
+<br>

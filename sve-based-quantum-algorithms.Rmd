@@ -1,0 +1,8 @@
+# SVE-based quantum algorithms {#chap-svebased}
+
+
+<div style="text-align: right"> Contributors: Alessandro Luongo, Armando Bellante </div>
+<br>
+
+<div style="text-align: right"> Translation:  </div>
+<br>

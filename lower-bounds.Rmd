@@ -1,0 +1,7 @@
+# Lower bounds on query complexity of quantum algorithms {#chap-lowerbounds}
+
+<div style="text-align: right"> Contributors: Trong Duong </div>
+<br>
+
+<div style="text-align: right"> Translation:  </div>
+<br>

@@ -1,0 +1,7 @@
+# Dimensionality reduction {#chap-dimensionality-reduction}
+
+<div style="text-align: right"> Contributors: Alessandro Luongo, Armando Bellante</div>
+<br>
+
+<div style="text-align: right"> Translation:  </div>
+<br>

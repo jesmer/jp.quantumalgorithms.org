@@ -1,0 +1,8 @@
+# q-means {#chap-q-means}
+
+<div style="text-align: right"> Contributors: Alessandro Luongo - based on work [@kerenidis2019qmeans] </div>
+<br>
+
+<div style="text-align: right"> Translation:  </div>
+<br>
+

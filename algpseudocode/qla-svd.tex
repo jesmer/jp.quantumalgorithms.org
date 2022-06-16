@@ -1,0 +1,63 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{braket}
+\usepackage{amsmath}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+
+\begin{document}
+\pagestyle{empty} 
+
+\begin{algorithm}[H]
+\caption{Quantum matrix multiplication/ linear systems.} \label{qmat}
+\begin{algorithmic}[1]
+\REQUIRE Quantum access to matrix $A \in \R^{n\times n}$ with eigenvalues in
+$A$ lie in $[1/\kappa, 1]$. Input state $\ket{x}=\sum_{i} \beta_{i} \ket{v_{i}}\in \R^{n}$, where $v_{i}$ are right singular vectors for $A$.
+\STATE Perform singular value estimation with precision $\epsilon_{1}$ for $A$ on $\ket{x}$ to obtain $\sum_{i} \beta_{i} \ket{v_{i}} \ket{\overline{\lambda}_{i}}$.
+\STATE Perform a conditional rotation and uncompute the $SVE$ register to obtain the state: \nl
+(i)  $\sum_{i} \beta_{i} \ket{v_{i}} ( \overline{\lambda_{i}}  \ket{0} + \gamma \ket{1})$ for matrix multiplication.  \nl
+(ii) $\sum_{i} \beta_{i} \ket{v_{i}} ( \frac{1} {\kappa \overline{\lambda_{i}} }  \ket{0} + \gamma \ket{1})$ for linear systems. \nl
+\STATE Perform amplitude amplification with the unitary $V$ implementing steps $1$ and $2$, to obtain (i) $\ket{z} = \sum_{i} \beta_{i} \overline{\lambda_{i}}  \ket{v_{i}}$ or (ii) $\ket{z} = \sum_{i} \beta_{i} \frac{1}{\overline{\lambda_{i}}} \ket{v_{i}} $. \nl
+\end{algorithmic}
+\end{algorithm}
+
+\end{document}
+
+
+
+#### Algorithm:
+ - **Require**:
+    - QRAM acces to rows of $M$ and $\mathbb{R}^{n \times d}$, and $\ket{x} \in \mathbb{R}^d$
+    - A threshold $\theta$ and an error parameter $\delta > 0$.
+ - **Ensure**:
+    - Our output register is in state $\ket{Mx}, \ket{M^{-1}x}$ or $\ket{M^{+}\_{\theta,\delta}M\_{\theta,\delta}x}$
+
+1. Create the state: $\ket{x} = \sum_{i} \alpha_i\ket{v_i} $ using the QRAM.
+2. Perform SVE on $M$ with precision $\epsilon / \kappa(M)$ for matrix multiplication and inversion and with precision $\delta\theta$ for matrix projection. This step creates the state: $ \sum_{i} \alpha_i\ket{v_i}\ket{\overline{\sigma}_i} $
+3. Perform a conditional operation on an ancilla qubit to get
+  -  for matrix multiplication: $ \sum\limits_{i=1}^d \alpha_i\ket{v_i}\ket{\overline{\sigma}_i}\Big(\overline{\sigma}_i\ket{0} + \sqrt{1 - \overline{\sigma}^2_i}\ket{1}\Big) $
+  -  for matrix inversion: $ \sum\limits_{i=1}^d \alpha\_i\ket{v\_i}\ket{\overline{\sigma\_i}} \left(\frac{\overline{\sigma}\_{min}}{	\overline{\sigma}\_i}\ket{0} + \sqrt{1- \left(\frac{\overline{\sigma}\_{min}}{\overline{\sigma}\_i}\right)^2}\ket{1} \right)$
+  -  for projecting in the subspace spanned by singular values smaller than $\theta$, map $\ket{\overline{\sigma}_j}\ket{0} \to \ket{\overline{\sigma}_i}\ket{0}$ if $\overline{\sigma_i }< (1+\delta) \theta$ and to $\ket{\overline{\sigma}_i}\ket{1}$ otherwise.
+4. Uncompute the SVE to get the following states:
+  - for matrix multiplication: $ \sum\limits\_{i=1}^d \alpha_i \overline{\sigma}_i \ket{v_i}  \ket{0} + \ket{G}\ket{1} $
+  -  for matrix inversion: $ \overline{\sigma}\_{min} \sum\limits_{i=1}^d { \frac{\alpha\_i}{\overline{\sigma}\_i}}  \ket{v\_i}  \ket{0}
++\ket{G} \ket{1} $
+  -  for projection in a subspace: $ \sum\limits\_{j \in S}  \alpha\_j \ket{v\_j}\ket{0}  + \sum\limits\_{j \in \bar{S}}  \alpha\_j\ket{v\_j}\ket{1}$ where $S$ is the set of $j$'s such that $\sigma_j \leq \theta$ and some $j$'s such that $\sigma_j \leq [\theta, (1+\delta)\theta)$, and $\bar{S}$ is the complement of $S$.
+
+5. Perform amplitude **amplification*** on the register $\ket{0}$ with the unitary $U$ implementing steps 1 to 4, to obtain:
+  - for matrix multiplication: $\ket{z}$ such that $| \ket{z}-\ket{Mx}| \leq \epsilon$, using
+$O(\kappa(M))$ iterations
+  -  for matrix inversion: $\ket{z}$ such that $\|\ket{z} - \ket{M^{-1}x} \| < \epsilon $, using $O(\kappa(M))$ iterations
+  -  for projection in a subspace: $\ket{M^{+}\_{\theta, \delta}M\_{\theta, \delta} x}$, using
+ $O(\frac{ \norm{x}}{\norm{M^{+}\_{\leq \theta, \delta}M\_{\leq \theta, \delta}x}})$ iterations
+
+
+6. Perform amplitude **estimation** on the register $\ket{0}$ with the unitary $U$ implementing steps 1 to 4, to obtain
+  -  for matrix multiplication: $\overline{\norm{Mx}}$ such that $\|\overline{\norm{Mx}} - \norm{Mx} \| \leq \eta \norm{Mx} $, using $O(\kappa(M)/\eta)$ iterations
+
+ - for matrix inversion: $\overline{\norm{M^{-1}x}	}$ such that $\|\overline{\norm{M^{-1}x} }  - \norm{M^{-1}x} \| \leq \eta \norm{M^{-1}x} $, using $O(\kappa(M)/\eta)$ iterations
+
+  -  for projection in a subspace: $\overline{ \norm{M^{+}\_{\theta, \delta}M\_{\theta, \delta} x}}$ such that $\| \overline{ \norm{M^{+}\_{\theta, \delta}M\_{\theta, \delta} x}}-  \norm{M^{+}\_{\theta, \delta}M\_{\theta, \delta} x} \| \leq \eta \norm{M^{+}\_{\theta, \delta}M\_{\theta, \delta} x}$, using $O(\frac{ \norm{x}}{\eta \norm{M^{+}\_{\leq \theta, \delta}M\_{\leq \theta, \delta}x}})$ iterations

@@ -1,0 +1,11 @@
+# (PART) Quantum Machine Learning {-}
+
+
+# Quantum perceptron
+
+<div style="text-align: right"> Contributors: Armando Bellante, Samantha Buck </div>
+<br>
+
+<div style="text-align: right"> Translation:  </div>
+<br>
+

@@ -1,0 +1,4 @@
+# Classical machine learning {#chap-machinelearning}
+
+<div style="text-align: right"> Translation:  </div>
+<br>
