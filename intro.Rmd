@@ -1,92 +1,83 @@
 # (PART) Bridging the gap {-}
 
-# Quantum computing and quantum algorithms {#chapter-intro}
+# 量子コンピューティングと量子アルゴリズム {#chapter-intro}
 
-In this chapter we will introduce the notation used throughout the rest
-of the lecture notes. We will extensively use linear algebra (norm of
-matrices, SVD, properties of particular matrices, and so on), so the
-reader is higly encouraged to skim the appendix on his/her own, so to
-know the notation adopted here.
+この章では、講義ノートに使用される数学符号や表記法を紹介します。
+線形代数（行列のノルム、SVD、特定の行列のプロパティなど）をだいぶ使用され、
+ちゃんと理解できますように、読者は自分で付録をざっと読むことを強くお勧めします。
 
-## Getting rid of physics in quantum computing
+## 量子コンピューティングにおける物理学の知識をさておき
 
-Following one of the [lectures of
-Susskind](https://www.youtube.com/watch?v=8mi0PoPvLvs), we are going to
-start from a "handwavy" introduction of quantum mechanics, that starts
-from few considerations and lead straight to the Schrödinger equation.
-With a few mathematical tricks, we are going to give an intuitive
-justification of all the 4 axioms of quantum mechanics that are stated
-in the next sections. The hope is that thanks to this introduction, the
-reader can be gently guided from a tiny physical intuition to a greater
-understanding of the **axioms of quantum mechanics**. Despite the name
-"axioms of quantum mechanics" might seems (obviously) related to
-physics, thanks to this formulation (which comes from [@NC02]), we could
-eventually think of them as "axioms of quantum computing". As [Scott
-Aaronson](https://www.youtube.com/watch?v=SJkbe4Rkv9c) rightly said, if
-you are not a physicist, you need to remove physics from quantum
-mechanics to understanding it!
+まずサスキンド氏のこの講義[lectures of Susskind](https://www.youtube.com/watch?v=8mi0PoPvLvs)で、
+量子力学の「手軽く」の紹介から始めます。
+これで、いくつかの考慮事項から始まり、シュレディンガー方程式との関係を直接につながります。
+いくつかの数学的計算トリックで、次のセクションで説明する量子力学の4つの公理すべてをざっとの証明方法を説明します。
+この紹介を通して、みなさんに小さな物理的な推理から**量子力学の公理**のより深い理解へ導かれることを期待するのでしょう。
+これらの「量子力学の公理」という名前は（明らかに）物理学に関連しているように見えるかもしれませんが、
+Nielsen and Chuang氏（2002の出版[@NC02]）のかけで、「量子コンピューティングの公理」の定式化はすでに進化したと考えられます。
+たぶんスコット・アーロンソン氏が言っていた(https://www.youtube.com/watch?v=SJkbe4Rkv9c)ように、
+あなたが物理学者ではないから、量子領域に理解するために量子力学から物理学を取り除く必要があると考えられるのでしょう。
 
-The objective is that the reader should *not* feel the need to dig into
-quantum mechanical details of quantum computers, but can comfortably sit
-on top of the 4 axioms of quantum mechanics, and build (a lot) from
-there.
+量子コンピューターの学習は量子力学の学習を詳しく掘り下げる必要なく
+その4つの公理がたやすく学べることを納得してもらえばよいことにするのはこの章の目的です。
 
-When, at the beginning of the 20th century, physicists started to model
-quantum phenomena, they observed that the dynamic of the systems had two
-properties: they observed that the time and space evolution of quantum
-systems is continuous (as in classical mechanics) and reversible (unlike
-the classical world). They decided to formalize this concept as follows.
-First, they decided to model the state of a quantum system at time $p$
-as a function $\psi(p)$, and they decided to model the evolution of
-$\psi(p)$ for time $t$ as an operator $U(t)$ acting on $\psi(p)$s.
-Formally, the two requirements can be written as:
+20世紀の初めに、物理学者さんたちが量子現象のモデル化を構築してきたとき、
+システム上にそのダイナミックの2つの特性ー
+量子システムの時間と空間の進化は（クラシック力学と同じ）連続的で可逆的（クラシック力学と違う）であることが発見されました。
+よって、この概念を下記のモデルで形式化して書くことにしました：
 
--   $U(\epsilon)=I-i\epsilon H$ (continuity)
--   $U^\dagger(t)U(t)=I$ (reversibility)
+量子システムの瞬間状態（時間$p$）は　$\psi(p)$　モデル化とし、
+その時間的な $t$ 進化した結果をはある演算子 $U(t)$ でこのシステムを応用した$\psi(p)$とのこと。
+この２つの特性の要求は数学的には下記の公式の通り：
 
-The first requirement reads that if we were to apply an evolution for a
-small amount of time $\epsilon$, then $U$ would behave almost as the
-identity, and then it will apply for a "small" amount another operator
-$H$. The second requirement reads that if we "undo" the operator $U$, by
-applying the transpose conjugate, we would obtain the identity, i.e. we
-haven't change the state of the system. From these two requirements, we
-can already derive the following observation.
+-   $U(\epsilon)=I-i\epsilon H$ (連続性条件)
+-   $U^\dagger(t)U(t)=I$ (可逆性条件)
+
+一番目の条件は要するに、少しの時間　$\epsilon$　で進化してもこのシステム（$U$ という）自身はほぼ恒等的（アイデンティティ）にし、
+変わったはこの小さい部分は別の演算子Hで満足すること。
+二番目の条件は、可逆性なので、この $U$ を逆応用するとアイデンティティで、
+つまりシステムの状態はかわりしないとのこと。
+
+この２つの条件をあわせば、下記の通りに演算できます：
 
 $$I = U^\dagger(\epsilon)U(\epsilon)= (I+i\epsilon H)(I-i\epsilon H) = I -i \epsilon H + i \epsilon H^\dagger + O(\epsilon^2).$$
-The only way for this equation to hold is for $H=H^\dagger$.
 
-I.e. the operator $H$ should be equal to its transpose conjugate. In
-mathematics, we have a name for such operators, and they are called
-Hermitian operators! (More about those in the appendix!). Now we can ask
-ourselves what happens when we apply $U(\epsilon)$ to a quantum state
-$\psi(t)$? Well it's simple to see now:
+よって、この式を満足しなければならない条件は　$H=H^\dagger$　とのことです。
+
+つまり、$H$　という演算子（マトリクス）自身は共役転置という特性があります。
+数学上はこのような条件を満足できる演算子はエルミート演算子というです（詳しいは付録にご参考を）！
+では、ある量子状態　$\psi(t)$　が　$U(\epsilon)$　との演算子で施されればどうなりますかって問いてみるとー
+
 $$U(\epsilon)\psi(t) = \psi(t+\epsilon) = \psi(t) -i \epsilon H\psi(t).$$
-With a little algebra we can rewrite the previous equation as:
 
-$$ \frac{\psi(t+\epsilon) -  \psi(t)}{\epsilon} = -i  H\psi(t).$$ Note
-that the left-hand side part of this equation can be rewritten as a
-derivative: $$\frac{d}{dt}\psi(t) = -i H \psi(t).$$ But this is the
-well-known Schrödinger equation! Note that, as computer scientists, we
-take the right to remove some physical constant ($\hbar$) out of the
-equation. What should be the takeaway of these observations? Well, first
-we know that the Schrödinger equation is a differential equation whose
-solution is fully determined if we were to know the initial state of our
-system $\psi(p)$. Formally the solution can be written as:
+少しの代数で演算すると：
 
-$$\psi(p+t)=e^{-iHt}\psi(p).$$ From this last equation we can observe
-further (more on this in the appendix) that the exponential of an
-Hermitian matrix $e^{-iHt}$ is *defined* through its Taylor expansion is
-just a *unitary* matrix: $U(t)=e^{-itH}$. Unitary matrices are exactly
-those matrices that describe isometries: applying a unitary matrix to a
-vector won't change its length. From this, we see that the two quantum
-states $\psi(p+t)$ and $\psi(p)$ could be taken just to be vectors of a
-fixed length, which - for practicality - we take to be unit vectors.
-Notation-wise, we denote unit vectors describing quantum states as
-"kets", i.e. we rewrite this equation as:
+$$ \frac{\psi(t+\epsilon) -  \psi(t)}{\epsilon} = -i  H\psi(t).$$ 
 
-$$\ket{\psi(p+t)}=U(t)\ket{\psi(p)}$$ Hopefully, this introduction
-should be enough for getting a better intuition of what comes next, and
-give you a "justification" for the axioms of quantum mechanics.
+$\epsilion$ はほんのすこしに近づいてくると微分になります。　$$\frac{d}{dt}\psi(t) = -i H \psi(t)$$
+
+これはシュレディンガー数式になります！
+定数　($\hbar$)　はさておき、より重要な発見はこの量子システムは微分方程式がみえます。
+そうすると、システムの初期状態　$\psi(p)$　を知っておけば完全に決定されます。
+
+正式には、このシステムの解は下記の通りです：
+
+$$\psi(p+t)=e^{-iHt}\psi(p)$$ 
+
+上記の公式のエルミート行列（マトリクス）の指数関数　$e^{-iHt}$　（詳しいは付録にご参考を）で見えますが、
+これはエルミートのテイラー展開と定義され、
+この関数　$U(t)=e^{-itH}$、実はユニタリ行列てあります。
+ユニタリ特性というのはあるベクトルに応用されるとその長さはかわらない、つまり等長性っていうことです。
+
+これで、$\psi(p+t)$ と $\psi(p)$　は長さ固定されたのベクトルとしての量子状態、
+実際的に単位ベクトルでに採用されることにし、
+表記上、この単位ベクトルはその量子状態に「ケット」と呼び、この方程式を次のように書き直します。
+
+$$\ket{\psi(p+t)}=U(t)\ket{\psi(p)}$$ 
+
+この紹介をきっかけで、次の章節になにか来るのかと、
+その量子力学の公理の言い開きをあじわいをしてもらえるのでしょう。
+
 
 ## Axioms of quantum mechanics {#section-axioms}
 
@@ -100,7 +91,7 @@ this thesis. For the postulates, we follow the standard formulation in
 ::: {.proposition name="Postulate 1"}
 Associated to any isolated physical system is a complex vector space with inner product (that is, a Hilbert space) known as the state space of the system. The system is completely described by its state vector, which is a unit vector in the system's state space.
 :::
-
+h
 As quantum states are described by unit vectors, we write $\ket{\psi}$
 for a unit vector $\psi \in \mathcal{H}^n$. So for a non-normalized
 vector $x \in \R^n$, the normalized quantum state is represented as
