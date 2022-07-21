@@ -30,11 +30,6 @@ know the notation adopted here.
 
 まず、量子システム当時（時間$t$）の瞬間状態$p$はをモデル化すると$\psi(p)$とし、その時間的な進化した結果は下記の公式の通り：
 
-First, they decided to model the state of a quantum system at time
-as a function , and they decided to model the evolution of
-$\psi(p)$ for time  as an operator $U(t)$ acting on $\psi(p)$s.
-Formally, the two requirements can be written as:
-
 -   $U(\epsilon)=I-i\epsilon H$ (連続性条件)
 -   $U^\dagger(t)U(t)=I$ (可逆性条件)
 
@@ -113,36 +108,33 @@ $\ket{x}\bra{y} = \sum_{i,j \in [d]}x_i y_j \ket{i}\bra{j} \in \mathcal{H}^d\oti
 $\ket{\varphi} = \alpha\ket{0}+\beta\ket{1}$ 
 
 
-::: {.proposition name="Postulate 2"}
-The evolution of a closed quantum system is described by a unitary transformation. That is, the state $\ket{\psi}$  of the system at time $t_1$ is related to the state $\ket{\psi}$  of the system at time $t_2$ by a unitary operator $U$ which depends only on the times $t_1$ and $t_2$.
+::: {.proposition name="仮説2"}
+閉合状態の量子システムの進化は、ユニタリ変換によって記述されます。つまり、状態$\ket{\psi}$のシステムのt1時の状態はt2時のシステムの 状態の間には$t_1$と$t_2$のみの時間で構築されたユニタリ演算子$U$で関連しています。
+
 :::
 
-A matrix $U\in \mathbb{C}^{d \times d}$ is said to be unitary if
-$UU^\dagger = U^\dagger U = I$, that is, if the inverse of $U$ equal to
-its conjugate transpose. From this fact it follows that unitary matrices
-are norm-preserving, and thus can be used as suitable mathematical
-description of a pure quantum evolution. It is a standard exercise to
-see that the following are all equivalent definition of unitary matrices
-[@DeWolf]:
+ある行列$U\in \mathbb{C}^{d \times d}$が$UU^\dagger = U^\dagger U = I$を満足すればユニタリ行列と定義します。
+つまり、行列$U$の逆算は自身の共役転置に等しいとのこと。
+この特徴から、ユニタリ行列はノルムを保持すると証明でき、純粋な量子進化に適切な数学的記述として使用できます。以下がすべてユニタリ行列の同等の定義であることを確認するのは標準的な演習です（[@DeWolf]）：
 
--   $\braket{Av, Aw} = \braket{v,w}$ for all $v,w$.
--   $\norm{Av} = \norm{v}$ for all $v$
--   $\norm{Av} = 1$ if $\norm{v}=1$.
--   $U$ is a normal matrix with eigenvalues lying on the unit circle
--   $|\det(U)|=1$
--   The columns and the rows of $U$ form an orthonormal basis of
-    $\mathcal{C}^d$
--   $U$ can be written as $e^{iH}$ for some Hermitian operator $H$.
 
-::: {.example name="Determinant=1 is a necessary but not sufficient condition for being unitary."}
-It is simple to see that any 2x2 diagonal matrix $A$ with entries $10$ and $1/10$ has determinant is 1, but it's not a unitary matrix: $A^\dagger A = AA^\dagger \neq I$.
+
+-   任意な$v,w$で　$\braket{Av, Aw} = \braket{v,w}$.
+-   任意な$v$で$\norm{Av} = \norm{v}$
+-   $\norm{Av} = 1$ もし $\norm{v}=1$.
+-   $U$ 自身の行列で、その固有値が単位円に乗せること
+-   行列式　$|\det(U)|=1$
+-   $U$の　列と行は$\mathcal{C}^d$の正規直交基底を形成する　
+-   $U$自身はあるエルミート演算子$H$で$e^{iH}$に書くことができること.
+
+::: {.example name="行列式=1はユニタリの必要だが十分ではないという条件であります"}
+この確認は簡単であり、ある2x2対角行列$A$がその数は$10$ と $1/10$として、 行列式は1ですが、ユニタリ行列ではありません: $A^\dagger A = AA^\dagger \neq I$
 :::
 
-It will be useful to recall that if we have a unitary that performs the
-mapping $\ket{a_i} \mapsto \ket{b_i}$, we can have the "matrix" form of
-the operator as $\sum_i \ket{b_i}\bra{a_i}$. Recall also that the Pauli
-matrices are both unitary *and* Hermitian, and this fact will be useful
-in many places throughout this text.
+もしある演算子で$\ket{a_i} \mapsto \ket{b_i}$マッピングを実行するとき、
+この演算子の行列フォームの形式$\sum_i \ket{b_i}\bra{a_i}$で 覚えておくと便利です。
+また、パウリ行列はユニタリ*と*エルミートの両方特徴でもあり、これを暗記すると下記の文書に多くの場所で役立ちます。
+
 
 ```{=html}
 <!--
@@ -200,24 +192,27 @@ in many places throughout this text.
 (ref:huang2019near) [@huang2019near]
 
 ::: {.exercise #ntqls name="From (ref:huang2019near)"}
-Let $k \in \{0,1\}^n$ be an arbitrary $n$-bitstring.
-Let $A=(\sigma_{x}^{(1)})^{k_1} \otimes \dots \otimes (\sigma_{x}^{(n)})^{k_n}$ and $\ket{b}=\ket{0^n}$.
-What is the solution to the equation $A\ket{x} =\ket{b}$
+任意であること$n$-ビットストリーング$k \in \{0,1\}^n$.
+もし$A=(\sigma_{x}^{(1)})^{k_1} \otimes \dots \otimes (\sigma_{x}^{(n)})^{k_n}$　と　$\ket{b}=\ket{0^n}$の場合、
+方程式$A\ket{x} =\ket{b}$の解は何ですか。
+
 :::
 
-::: {.proposition #postulate3 name="Postulate 3"}
-Quantum measurements are described by a collection $\{M_m\}$ of measurement operators. These are operators acting on the state space of the system being measured. The index $m$ refers to the measurement outcomes that may occur in the experiment. If the state of the quantum system is
-$\ket{\psi}$ immediately before the measurement, then the probability that the result $m$ occurs is given by
+::: {.proposition #postulate3 name="仮説3"}
+量子測定は 測定演算子$\{M_m\}$のセットコレクションによって記述されます。
+これらは、測定対象のシステムの状態空間に作用する演算子です。インデックス$m$は実験である測定結果が発生する概率であることを指します。
+もしある量子システムの状態が測定の直前は$\ket{\psi}$との場合、測定$m$で生じた結果で発生する概率は下記の通り：
+
 $$
 p(m) = \bra{\psi}M^\dagger_m M_m \ket{\psi}
 $$
-and the state of the system after the measurement is
+また、測定後のシステムの状態は下記の通り：
 $$
 \frac{M_m\ket{\psi}}{\sqrt{\braket{\psi|M_m^\dagger M_m|\psi}}}
 $$
-The measurement operators satisfy the \emph{completeness equation}
+これらの測定演算子は、 \emph{completeness equation}
 $$
-\sum_m M^\dagger _m M_m = I
+\sum_m M^\dagger _m M_m = I　という条件が満足します。
 $$
 :::
 
